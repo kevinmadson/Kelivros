@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html 
+xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" http-equiv="X-UA-Conpatible" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />    
+    <title>JSF Hibernate</title>
+    <style type="text/css">
+    	.btnPos {
+    		margin: 12px;
+    	}
+    	.marginLeft12 {
+    		margin-left: 12px;
+    	}
+    	.successText {
+    		padding-left: 22px;
+    		font-weight: bold;
+    		color: green;
+    	}
+    	.personagem-table {
+			border-collapse: collapse;
+		}
+		.personagem-table-header {
+			text-align: center;
+			background: none repeat scroll 0 0 #E5E5E5;
+			border-bottom: 1px solid #BBBBBB;
+			padding: 2px;
+		}
+		.personagem-table-row {
+			padding: 12px;
+    		text-align: center;
+		}
+    </style>
+</h:head>
+<h:body>
+    <center><h2>Painel do Personagem</h2></center>
+    <h3 class="marginLeft12">Adicionar personagem de um livro</h3>
+	
+ 	<!-- Painel -->
+ 	<h:form id="frmPesquisa">
+ 		<p:messages />
+ 		<p:dataTable id="tablePersonagem" var="personagem" value="#{personagemBean.personagens}">
+ 			<f:facet name="header">
+ 				<p:commandButton value="Novo" oncomplete="PF('dlgManutencao').show()" />
+ 			</f:facet>
+ 			 			<f:facet name="header">
+ 				<p:commandButton value="Pesquisa" oncomplete="PF('dlgPesquisa').show()" />
+ 			</f:facet>
+ 			
+ 			<p:column headerText="Código">
+ 				<h:outputText value="#{personagem.id}"/>
+ 			</p:column>
+  			<p:column headerText="Personagem">
+ 				<h:outputText value="#{personagem.nome}"/>
+ 			</p:column>
+ 			  			<p:column headerText="Livro">
+ 				<h:outputText value="#{personagem.livro}"/>
+ 			</p:column>
+ 			<p:column headerText="Autor">
+ 				<h:outputText value="#{personagem.autor}"/>
+ 			</p:column>
+ 			<p:column headerText="Dinheiro">
+ 				<h:outputText value="#{personagem.dinheiro}"/>
+ 			</p:column>
+ 			<p:column>
+ 				<p:commandButton value="Editar" update=":frmManutencao" oncomplete="PF('dlgManutencao').show()">
+ 					<f:setPropertyActionListener value="#{personagem}" target="#{personagemBean.personagem}" />
+ 				</p:commandButton>
+ 				<p:commandButton value="Remover" action="#{personagemBean.delete}" process="@this" update=":frmPesquisa" >
+ 					<f:setPropertyActionListener value="#{personagem}" target="#{personagemBean.personagem}" />
+ 				</p:commandButton> 				
+ 			</p:column>			
+ 		</p:dataTable> 	
+ 		
+ 		<!-- Painel de pesquisa -->
+ 		<p:dialog widgetVar="dlgPesquisa" header="Pesquisa do personagem">    	
+	        <h:panelGrid columns="2">        	
+	            <div class="form-group">
+	            	<h:outputLabel value="Nome do Personagem:" styleClass="control-label" />
+	            	<div class="col-xs-10">
+	            		<p:inputText value="#{personagemBean.personagemNome}" styleClass="form-control" /> 
+	            	</div> 
+	            </div>
+	            <div class="form-group">
+	            	<h:outputLabel value="nome do livro:" styleClass="control-label" />
+	            	<div class="col-xs-10">	
+	            		<p:inputText value="#{personagemBean.personagemLivro}" styleClass="form-control" />
+	            	</div> 
+	            </div>
+	            <div class="form-group">
+	        		<div class="col-xs-offset-2 col-xs-10">
+	            		<p:commandButton value="Pesquisar Personagem" actionListener="#{personagemBean.pesquisar}" 
+	            		styleClass="btn btn-primary btn-sm btnPos" update=":frmPesquisa, frmManutencao" />
+	            	</div>
+	            </div>
+	            	            <div class="form-group">
+	        		<div class="col-xs-offset-2 col-xs-10">
+	            		<p:commandButton value="Pesquisar Livro" actionListener="#{personagemBean.pesquisarLivro}" 
+	            		styleClass="btn btn-primary btn-sm btnPos" update=":frmPesquisa, frmManutencao" />
+	            	</div>
+	            </div>
+	        </h:panelGrid>
+    	</p:dialog>    	 	
+ 	</h:form>
+ 	
+ 	<!-- Painel de adicionar -->
+ 	
+    <h:form id="frmManutencao" styleClass="form-horizontal">
+    	<p:dialog widgetVar="dlgManutencao" header="Manutenção do Personagem">    	
+	        <h:panelGrid columns="2">        	
+	            <div class="form-group">
+	            	<h:outputLabel value="Nome do Personagem:" styleClass="control-label" />
+	            	<div class="col-xs-10">
+	            		<p:inputText value="#{personagemBean.personagem.nome}" styleClass="form-control" /> 
+	            	</div> 
+	            </div>
+	            <div class="form-group">
+	            	<h:outputLabel value="nome do livro:" styleClass="control-label" />
+	            	<div class="col-xs-10">	
+	            		<p:inputText value="#{personagemBean.personagem.livro}" styleClass="form-control" />
+	            	</div> 
+	            </div>
+	            <div class="form-group">
+	            	<h:outputLabel value="Autor do livro:" styleClass="control-label" />
+	            	<div class="col-xs-10">	
+	            		<p:inputText value="#{personagemBean.personagem.autor}" styleClass="form-control" />
+	            	</div> 
+	            </div>
+	            <div class="form-group">
+	            	<h:outputLabel value="Dinheiro do Personagem:" styleClass="control-label" />
+	            	<div class="col-xs-10">	
+	            		<p:inputText value="#{personagemBean.personagem.dinheiro}" styleClass="form-control" />
+	            	</div> 
+	            </div>
+	            <div class="form-group">
+	        		<div class="col-xs-offset-2 col-xs-10">
+	            		<p:commandButton value="Salvar" actionListener="#{personagemBean.savePersonagemRecord}" 
+	            		styleClass="btn btn-primary btn-sm btnPos" update=":frmPesquisa, frmManutencao" />
+	            	</div>
+	            </div>
+	        </h:panelGrid>
+    	</p:dialog>    	
+    </h:form> 	
+ 	
+ 	<center><h2 style="font-size:150%"><a href="index.jsp">voltar</a></h2></center>
+ 	
+</h:body>
+
+
+</html>

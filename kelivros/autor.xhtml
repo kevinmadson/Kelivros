@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html 
+xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" http-equiv="X-UA-Conpatible" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />    
+    <title>JSF Hibernate</title>
+    <style type="text/css">
+    	.btnPos {
+    		margin: 12px;
+    	}
+    	.marginLeft12 {
+    		margin-left: 12px;
+    	}
+    	.successText {
+    		padding-left: 22px;
+    		font-weight: bold;
+    		color: green;
+    	}
+    	.autor-table {
+			border-collapse: collapse;
+		}
+		.autor-table-header {
+			text-align: center;
+			background: none repeat scroll 0 0 #E5E5E5;
+			border-bottom: 1px solid #BBBBBB;
+			padding: 2px;
+		}
+		.autor-table-row {
+			padding: 12px;
+    		text-align: center;
+		}
+    </style>
+</h:head>
+<h:body>
+    <center><h2>Painel do Autor</h2></center>
+    <h3 class="marginLeft12">Adicionar livros escritos/publicados</h3>
+ 	
+ 	
+ 	<!-- painel -->
+ 	
+ 	<h:form id="frmPesquisa">
+ 		<p:messages />
+ 		<p:dataTable id="tableAutor" var="autor" value="#{autorBean.autores}">
+ 			<f:facet name="header">
+ 				<p:commandButton value="Novo" oncomplete="PF('dlgManutencao').show()" />
+ 			</f:facet>
+ 			 			<f:facet name="header">
+ 				<p:commandButton value="Pesquisa" oncomplete="PF('dlgPesquisa').show()" />
+ 			</f:facet>
+ 			
+ 			<p:column headerText="Código">
+ 				<h:outputText value="#{autor.id}"/>
+ 			</p:column>
+  			<p:column headerText="Autor">
+ 				<h:outputText value="#{autor.nome}"/>
+ 			</p:column>
+ 			<p:column headerText="Livro">
+ 				<h:outputText value="#{autor.livro}"/>
+ 			</p:column>
+ 			<p:column headerText="Ano">
+ 				<h:outputText value="#{autor.ano}"/>
+ 			</p:column>
+ 			<p:column headerText="Quant.Vendas (M) ">
+ 				<h:outputText value="#{autor.vendas}"/>
+ 			</p:column>
+ 			<p:column>
+ 				<p:commandButton value="Editar" update=":frmManutencao" oncomplete="PF('dlgManutencao').show()">
+ 					<f:setPropertyActionListener value="#{autor}" target="#{autorBean.autor}" />
+ 				</p:commandButton>
+ 				<p:commandButton value="Remover" action="#{autorBean.delete}" process="@this" update=":frmPesquisa" >
+ 					<f:setPropertyActionListener value="#{autor}" target="#{autorBean.autor}" />
+ 				</p:commandButton> 				
+ 			</p:column>			
+ 		</p:dataTable> 	
+ 		
+ 		
+ 		<!-- pesquisa do autor -->
+ 		<p:dialog widgetVar="dlgPesquisa" header="Pesquisa do autor">    	
+	        <h:panelGrid columns="2">        	
+	            <div class="form-group">
+	            	<h:outputLabel value="Nome do Autor:" styleClass="control-label" />
+	            	<div class="col-xs-10">
+	            		<p:inputText value="#{autorBean.autorNome}" styleClass="form-control" /> 
+	            	</div> 
+	            </div>
+	            <div class="form-group">
+	            	<h:outputLabel value="nome do livro:" styleClass="control-label" />
+	            	<div class="col-xs-10">	
+	            		<p:inputText value="#{autorBean.autorLivro}" styleClass="form-control" />
+	            	</div> 
+	            </div>
+	            <div class="form-group">
+	        		<div class="col-xs-offset-2 col-xs-10">
+	            		<p:commandButton value="Pesquisar Autor" actionListener="#{autorBean.pesquisar}" 
+	            		styleClass="btn btn-primary btn-sm btnPos" update=":frmPesquisa, frmManutencao" />
+	            	</div>
+	            </div>
+	            	            <div class="form-group">
+	        		<div class="col-xs-offset-2 col-xs-10">
+	            		<p:commandButton value="Pesquisar Livro" actionListener="#{autorBean.pesquisarLivro}" 
+	            		styleClass="btn btn-primary btn-sm btnPos" update=":frmPesquisa, frmManutencao" />
+	            	</div>
+	            </div>
+	        </h:panelGrid>
+    	</p:dialog>    	 	
+ 	</h:form>
+ 	
+ 	<!-- painel para adicionar -->
+ 	
+    <h:form id="frmManutencao" styleClass="form-horizontal">
+    	<p:dialog widgetVar="dlgManutencao" header="Manutenção do autor">    	
+	        <h:panelGrid columns="2">        	
+	            <div class="form-group">
+	            	<h:outputLabel value="Nome do Autor:" styleClass="control-label" />
+	            	<div class="col-xs-10">
+	            		<p:inputText value="#{autorBean.autor.nome}" styleClass="form-control" /> 
+	            	</div> 
+	            </div>
+	            <div class="form-group">
+	            	<h:outputLabel value="nome do livro:" styleClass="control-label" />
+	            	<div class="col-xs-10">	
+	            		<p:inputText value="#{autorBean.autor.livro}" styleClass="form-control" />
+	            	</div> 
+	            </div>
+	            <div class="form-group">
+	            	<h:outputLabel value="ano de lançamento:" styleClass="control-label" />
+	            	<div class="col-xs-10">	
+	            		<p:inputText value="#{autorBean.autor.ano}" styleClass="form-control" />
+	            	</div> 
+	            </div>
+	            
+	            <div class="form-group">
+	            	<h:outputLabel value="Vendidos Milhões:" styleClass="control-label" />
+	            	<div class="col-xs-10">	
+	            		<p:inputText value="#{autorBean.autor.vendas}" styleClass="form-control" />
+	            	</div> 
+	            </div>
+	            
+	            <div class="form-group">
+	        		<div class="col-xs-offset-2 col-xs-10">
+	            		<p:commandButton value="Salvar" actionListener="#{autorBean.saveAutorRecord}" 
+	            		styleClass="btn btn-primary btn-sm btnPos" update=":frmPesquisa, frmManutencao" />
+	            	</div>
+	            </div>
+	        </h:panelGrid>
+    	</p:dialog>    	
+    </h:form> 	
+ 	
+</h:body>
+
+<center><h2 style="font-size:150%"><a href="index.jsp">voltar</a></h2></center>
+
+</html>
